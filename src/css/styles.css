@@ -23,3 +23,46 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+
+body {
+  width: 1440px;
+} 
+
+.gallery {
+  padding: 24px 156px;
+  display: flex; 
+  flex-wrap: wrap;
+  gap: 16px;
+  row-gap: 24px;
+  list-style-type: none;
+} 
+
+img {
+  width: 360px;
+  height: 200px;
+  display: block;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.04);
+}
+
+
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  background-color: #4e75ff;
+  font-weight: 500;
+  font-size: 16px;
+  color: #fff;
+  height: 40px;
+}
+
+button:hover {
+  background-color: #6c8cff;
+}
