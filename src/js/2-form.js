@@ -1,51 +1,56 @@
-const formData = { email: '', message: '' };
-const LS_KEY = 'feedback-form-state';
 
-const feedbackForm = document.querySelector('.feedback-form');
-populateFormFromStorage();
 
-feedbackForm.addEventListener('input', inputsHandler);
-feedbackForm.addEventListener('submit', submitHandler);
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('.feedback-form');
+  const formData = {
+      email: "",
+      message: ""
+  };
 
-function inputsHandler(event) {
-  formData.email = event.currentTarget.elements.email.value.trim();
-  formData.message = event.currentTarget.elements.message.value.trim();
-
-  try {
-    localStorage.setItem(LS_KEY, JSON.stringify(formData));
-  } catch (error) {
-    console.log(err);
-    return;
-  }
-}
-
-function submitHandler(event) {
-  event.preventDefault();
-
-  if (!formData.email || !formData.message) {
-    alert('Fill please all fields');
-    return;
+  
+  const storedData = JSON.parse(localStorage.getItem('feedback-form-state'));
+  if (storedData) {
+      formData.email = storedData.email;
+      formData.message = storedData.message;
+      populateForm(); 
   }
 
-  console.dir(formData);
-  localStorage.removeItem(LS_KEY);
-  event.currentTarget.reset();
-}
+  form.addEventListener('input', function(event) {
+      if (event.target.matches('input[type="email"]')) {
+          formData.email = event.target.value;
+      } else if (event.target.matches('textarea')) {
+          formData.message = event.target.value;
+      }
+      saveFormData(); 
+  });
 
-function populateFormFromStorage() {
-  let dataFromStorage = {};
-  try {
-    dataFromStorage = JSON.parse(localStorage.getItem(LS_KEY));
-  } catch (error) {
-    console.log(err);
-    return;
+
+  form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+   
+      if (formData.email.trim() === '' || formData.message.trim() === '') {
+          alert('Fill please all fields');
+          return;
+      }
+
+      console.log(formData);
+
+
+      localStorage.removeItem('feedback-form-state');
+      formData.email = "";
+      formData.message = "";
+      populateForm(); 
+  });
+
+ 
+  function saveFormData() {
+      localStorage.setItem('feedback-form-state', JSON.stringify(formData));
   }
 
-  if (!dataFromStorage) {
-    return;
-  }
 
-  for (const key in dataFromStorage) {
-    feedbackForm.elements[key].value = dataFromStorage[key];
+  function populateForm() {
+      document.querySelector('input[type="email"]').value = formData.email;
+      document.querySelector('textarea').value = formData.message;
   }
-}
+});
